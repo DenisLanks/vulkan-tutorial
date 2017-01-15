@@ -2,33 +2,14 @@
 //
 
 #include "stdafx.h"
-#include <vulkan\vulkan.h>
+#include "Main.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-	VkInstance vkInstance = nullptr;
-
-	VkApplicationInfo vkApplicationInfo = {};
-	vkApplicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	vkApplicationInfo.pApplicationName = "Vulkan Tutorial Application";
-	vkApplicationInfo.pEngineName = "Vulkan Engine";
-	vkApplicationInfo.apiVersion = 0;
-	vkApplicationInfo.applicationVersion = VK_VERSION_1_0;
-	vkApplicationInfo.engineVersion = VK_VERSION_1_0;
-
-	VkInstanceCreateInfo vkInstanceCreateInfo = {};
-	vkInstanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	vkInstanceCreateInfo.pNext = nullptr;
-	vkInstanceCreateInfo.pApplicationInfo = &vkApplicationInfo;
-	vkInstanceCreateInfo.enabledExtensionCount = 0;
-	vkInstanceCreateInfo.enabledLayerCount = 0;
-	vkInstanceCreateInfo.ppEnabledExtensionNames = nullptr;
-	vkInstanceCreateInfo.ppEnabledLayerNames = nullptr;
-	vkInstanceCreateInfo.flags = 0;
-
-	auto result = vkCreateInstance(&vkInstanceCreateInfo,nullptr,&vkInstance);
+	Application application = Application("Vulkan Tutorial Application", "Vulkan Engine", VK_VERSION_1_0, VK_VERSION_1_0);
+	auto result = application.initialize();
 	switch (result)
 	{
 		case VK_SUCCESS: {	cout << "VkInstance was created." << endl;	}break;
