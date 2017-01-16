@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Application.h"
-
+using namespace std;
 
 Application::Application(char * name, char * engineName, uint32_t appVersion, uint32_t engineVersion)
 {
@@ -10,15 +10,19 @@ Application::Application(char * name, char * engineName, uint32_t appVersion, ui
 	_appVersion = appVersion;
 	_engineVersion = engineVersion;
 	_vkInstance = nullptr;
+	_vkAllocationCallbacks = {};
 }
 
 
 Application::~Application()
-{
+{	
+	vkDestroyInstance(_vkInstance,&_vkAllocationCallbacks);
 }
 
 uint32_t Application::initialize()
 {
+	_vkAllocationCallbacks.pUserData = this;
+	_vkAllocationCallbacks.pfnFree = &onFreeApplication;
 	if (loadResource()!=0) {
 		return -1;
 	}	
@@ -62,4 +66,14 @@ uint32_t Application::run()
 VkInstance * Application::getVkInstance()
 {
 	return &_vkInstance;
+}
+
+char * Application::getName()
+{
+	return _name;
+}
+
+void VKAPI_PTR onFreeApplication(void* pUserData, void*   pMemory) {
+	Application *app =(Application *) pUserData;
+	cout <<"Releasing Application: " <<app->getName()<<endl;
 }
